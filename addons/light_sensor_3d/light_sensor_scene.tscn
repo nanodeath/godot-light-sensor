@@ -23,7 +23,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.1
 cull_mask = 0
 projection = 1
 size = 0.1
-far = 0.5
+far = 250.0
 
 [node name="SensorMesh" type="MeshInstance3D" parent="SubViewport/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.37114e-09, -0.1)
