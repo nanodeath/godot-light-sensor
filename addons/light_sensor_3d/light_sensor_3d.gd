@@ -1,4 +1,4 @@
-@icon("res://addons/light-sensor/icon.png")
+@icon("res://addons/light_sensor_3d/icon.png")
 @tool
 class_name LightSensor3D extends Node3D
 
