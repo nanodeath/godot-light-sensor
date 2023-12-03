@@ -59,9 +59,29 @@ func _ready():
 func refresh() -> void:
 	var texture := _sub_viewport.get_texture()
 	var image := texture.get_image() # this one's a doozy
-	var col := image.get_pixel(0, 0)
-	if col != color:
-		color = col
+	
+	# Next, we want to get every pixel and average their colors.
+	# Presumably calling get_data() once is faster than get_pixel() many times.
+	var color_data := image.get_data()
+	var color_data_size := color_data.size()
+	assert(color_data_size % 3 == 0, "Expected 3 channels per pixel")
+
+	# Sum all the values for each channel separately.
+	var average_color_array := [0, 0, 0]
+	for i in color_data.size():
+		average_color_array[i % 3] += color_data.decode_u8(i)
+	
+	# Finally, convert the sums of rgb values into the average color.
+	var pixel_count := color_data.size() / 3.0
+	var average_color := Color(
+		average_color_array[0] / pixel_count / 255,
+		average_color_array[1] / pixel_count / 255,
+		average_color_array[2] / pixel_count / 255,
+	)
+	
+	# Trigger updates if the color changed
+	if not color.is_equal_approx(average_color):
+		color = average_color
 		color_updated.emit(color)
 		light_level_updated.emit(light_level)
 
