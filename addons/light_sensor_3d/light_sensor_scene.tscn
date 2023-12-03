@@ -15,7 +15,7 @@ viewport_path = NodePath("SubViewport")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false
-size = Vector2i(64, 64)
+size = Vector2i(4, 4)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport"]
@@ -39,6 +39,7 @@ remote_path = NodePath("../SubViewport/Camera3D")
 [node name="DebugViewportSprite" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
 cast_shadow = 0
-pixel_size = 0.005
+pixel_size = 0.1
 axis = 1
+texture_filter = 0
 texture = SubResource("ViewportTexture_tmbga")
