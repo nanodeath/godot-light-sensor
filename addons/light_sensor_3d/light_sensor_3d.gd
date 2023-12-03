@@ -34,6 +34,9 @@ var _scene: Node3D
 var _sub_viewport: SubViewport
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
+
 	_scene = preload("res://addons/light_sensor_3d/light_sensor_scene.tscn").instantiate() as Node3D
 	add_child(_scene)
 	
