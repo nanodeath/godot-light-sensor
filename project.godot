@@ -21,7 +21,3 @@ project/assembly_name="godot-light-sensor"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/light_sensor_3d/plugin.cfg")
-
-[rendering]
-
-renderer/rendering_method="mobile"

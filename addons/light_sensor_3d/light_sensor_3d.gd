@@ -20,6 +20,9 @@ signal light_level_updated(luminance: float)
 ## Renders a square next to the sensor that shows what the subviewport is seeing.
 @export var enable_subviewport_debug = false
 
+## Prints out how long the sensor took every time it refreshes.
+@export var print_timing_information = false
+
 ## Color recorded by the probe during refresh().
 ## See also: light_level()
 var color: Color = Color.BLACK
@@ -54,9 +57,13 @@ func _ready():
 	
 	var debug_sprite := _scene.get_node("DebugViewportSprite") as Sprite3D
 	debug_sprite.visible = enable_subviewport_debug
+	
+	if print_timing_information:
+		print_debug(get_path(), ": This LightSensor3D is configured to print out timing information.")
 
 ## Recalculates the light/color affecting this probe.
 func refresh() -> void:
+	var t_start = Time.get_ticks_usec()
 	var texture := _sub_viewport.get_texture()
 	var image := texture.get_image() # this one's a doozy
 	
@@ -78,6 +85,10 @@ func refresh() -> void:
 		average_color_array[1] / pixel_count / 255,
 		average_color_array[2] / pixel_count / 255,
 	)
+	
+	var t_end := Time.get_ticks_usec()
+	if print_timing_information:
+		print(get_path(), " (a LightSensor3D) took %.2fms to refresh" % ((t_end - t_start) / 1000.0))
 	
 	# Trigger updates if the color changed
 	if not color.is_equal_approx(average_color):
