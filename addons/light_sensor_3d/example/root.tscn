@@ -1,0 +1,177 @@
+[gd_scene load_steps=7 format=3 uid="uid://bu3k5wgm6tyuq"]
+
+[ext_resource type="Script" path="res://addons/light_sensor_3d/example/sensor_label.gd" id="2_ljxqy"]
+[ext_resource type="Script" path="res://addons/light_sensor_3d/light_sensor_3d.gd" id="3_3whfq"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5l7yt"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_asboq"]
+sky_material = SubResource("ProceduralSkyMaterial_5l7yt")
+
+[sub_resource type="Environment" id="Environment_48oer"]
+background_mode = 2
+sky = SubResource("Sky_asboq")
+ambient_light_source = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u00y1"]
+size = Vector2(10, 5)
+
+[node name="Root" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_48oer")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+visible = false
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mesh = SubResource("PlaneMesh_u00y1")
+metadata/_edit_lock_ = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.776882, 0.629646, 0, -0.629646, 0.776882, 0, 1.74211, 2.50796)
+cull_mask = 1048573
+metadata/_edit_lock_ = true
+
+[node name="NoLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 1)
+
+[node name="LightProbe3D" type="Node3D" parent="NoLight"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 2
+
+[node name="Timer" type="Timer" parent="NoLight/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="NoLight"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.5, 0)
+visible = false
+layers = 3
+light_energy = 0.333
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="Label3D" type="Label3D" parent="NoLight" node_paths=PackedStringArray("light_probe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+billboard = 1
+text = "Light_0"
+script = ExtResource("2_ljxqy")
+light_probe = NodePath("../LightProbe3D")
+
+[node name="LittleLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 1)
+
+[node name="LightProbe3D" type="Node3D" parent="LittleLight"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 2
+
+[node name="Timer" type="Timer" parent="LittleLight/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="LittleLight"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.5, 0)
+layers = 3
+light_energy = 0.25
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="Label3D" type="Label3D" parent="LittleLight" node_paths=PackedStringArray("light_probe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+billboard = 1
+text = "Light_25"
+script = ExtResource("2_ljxqy")
+light_probe = NodePath("../LightProbe3D")
+
+[node name="SomeLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+
+[node name="LightProbe3D" type="Node3D" parent="SomeLight"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 2
+
+[node name="Timer" type="Timer" parent="SomeLight/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="SomeLight"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.5, 0)
+layers = 3
+light_energy = 0.5
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="Label3D" type="Label3D" parent="SomeLight" node_paths=PackedStringArray("light_probe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+billboard = 1
+text = "Light_50*"
+script = ExtResource("2_ljxqy")
+light_probe = NodePath("../LightProbe3D")
+log_color_change_event = true
+log_light_level_change_event = true
+
+[node name="BrightLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 1)
+
+[node name="LightProbe3D" type="Node3D" parent="BrightLight"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 2
+
+[node name="Timer" type="Timer" parent="BrightLight/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="BrightLight"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.5, 0)
+layers = 3
+light_energy = 0.75
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="Label3D" type="Label3D" parent="BrightLight" node_paths=PackedStringArray("light_probe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+billboard = 1
+text = "Light_75"
+script = ExtResource("2_ljxqy")
+light_probe = NodePath("../LightProbe3D")
+
+[node name="FullLight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, 1)
+
+[node name="LightProbe3D" type="Node3D" parent="FullLight"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 2
+
+[node name="Timer" type="Timer" parent="FullLight/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="FullLight"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 0.5, 0)
+layers = 3
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="Label3D" type="Label3D" parent="FullLight" node_paths=PackedStringArray("light_probe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+billboard = 1
+text = "Light_100"
+script = ExtResource("2_ljxqy")
+light_probe = NodePath("../LightProbe3D")
+
+[connection signal="timeout" from="NoLight/LightProbe3D/Timer" to="NoLight/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="LittleLight/LightProbe3D/Timer" to="LittleLight/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="SomeLight/LightProbe3D/Timer" to="SomeLight/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="BrightLight/LightProbe3D/Timer" to="BrightLight/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="FullLight/LightProbe3D/Timer" to="FullLight/LightProbe3D" method="refresh"]
