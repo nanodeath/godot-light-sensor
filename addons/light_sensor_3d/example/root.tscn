@@ -170,8 +170,52 @@ text = "Light_100"
 script = ExtResource("2_ljxqy")
 light_probe = NodePath("../LightProbe3D")
 
+[node name="TestLight1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.757093, 0.5, 1.77956)
+visible = false
+
+[node name="LightProbe3D" type="Node3D" parent="TestLight1"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 3
+enable_subviewport_debug = true
+
+[node name="Timer" type="Timer" parent="TestLight1/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="TestLight1"]
+transform = Transform3D(1, -8.35189e-23, -4.37114e-08, 4.37114e-08, 1.91069e-15, 1, 0, -1, 1.91069e-15, -0.006, 0.302, 0)
+layers = 3
+light_energy = 0.5
+shadow_enabled = true
+spot_angle = 10.0
+
+[node name="TestLight2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.208557, 0.5, 1.77956)
+visible = false
+
+[node name="LightProbe3D" type="Node3D" parent="TestLight2"]
+editor_description = "This light probe can track the color and luminance at its position. It does need to be manually refreshed, typically using a Timer node."
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+script = ExtResource("3_3whfq")
+layer = 3
+enable_subviewport_debug = true
+
+[node name="Timer" type="Timer" parent="TestLight2/LightProbe3D"]
+autostart = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="TestLight2"]
+transform = Transform3D(1, -8.35189e-23, -4.37114e-08, 4.37114e-08, 1.91069e-15, 1, 0, -1, 1.91069e-15, 0.089, 0.302, 0)
+layers = 3
+light_energy = 0.5
+shadow_enabled = true
+spot_angle = 10.0
+
 [connection signal="timeout" from="NoLight/LightProbe3D/Timer" to="NoLight/LightProbe3D" method="refresh"]
 [connection signal="timeout" from="LittleLight/LightProbe3D/Timer" to="LittleLight/LightProbe3D" method="refresh"]
 [connection signal="timeout" from="SomeLight/LightProbe3D/Timer" to="SomeLight/LightProbe3D" method="refresh"]
 [connection signal="timeout" from="BrightLight/LightProbe3D/Timer" to="BrightLight/LightProbe3D" method="refresh"]
 [connection signal="timeout" from="FullLight/LightProbe3D/Timer" to="FullLight/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="TestLight1/LightProbe3D/Timer" to="TestLight1/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="TestLight2/LightProbe3D/Timer" to="TestLight2/LightProbe3D" method="refresh"]
