@@ -6,6 +6,7 @@ shading_mode = 2
 [sub_resource type="PlaneMesh" id="PlaneMesh_ojrjg"]
 material = SubResource("StandardMaterial3D_jxs1c")
 size = Vector2(0.1, 0.1)
+orientation = 2
 
 [node name="LightSensorScene" type="Node3D"]
 
@@ -21,7 +22,7 @@ size = 0.1
 far = 0.5
 
 [node name="SensorMesh" type="MeshInstance3D" parent="SubViewport/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4.37114e-09, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.37114e-09, -0.1)
 layers = 0
 cast_shadow = 0
 gi_mode = 0
