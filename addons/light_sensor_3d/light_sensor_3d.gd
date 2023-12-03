@@ -16,6 +16,10 @@ signal light_level_updated(luminance: float)
 		layer = value
 		update_configuration_warnings()
 
+@export_group("Advanced")
+## Renders a square next to the sensor that shows what the subviewport is seeing.
+@export var enable_subviewport_debug = false
+
 ## Color recorded by the probe during refresh().
 ## See also: light_level()
 var color: Color = Color.BLACK
@@ -46,6 +50,10 @@ func _ready():
 
 	camera.cull_mask = layer
 	sensor_mesh.layers = layer
+	
+	
+	var debug_sprite := _scene.get_node("DebugViewportSprite") as Sprite3D
+	debug_sprite.visible = enable_subviewport_debug
 
 ## Recalculates the light/color affecting this probe.
 func refresh() -> void:
