@@ -1,4 +1,4 @@
-﻿# Godot Light Sensor 3D
+# Godot Light Sensor 3D
 
 Do you need to find the total amount of light reaching a point in your Godot 4 3D project? Then you've come to the right place.
 
