@@ -17,8 +17,8 @@ This asset contains a "light sensor" -- a tiny camera pointing at a tiny white p
 ### Positioning and Orientation
 
 The sensor is not a single point in space, capable of reading detecting light in a sphere. It's a plane, which means a couple things:
-1. You'll _probably_ want to place the sensor low to the ground of your game.
-2. You'll _probably_ want to orient the sensor so the sensor is pointing downwards (this is the default).
+1. It's recommended to place the sensor low to the ground of your game.
+2. It's recommended to orient the sensor so the sensor is pointing "downwards" (this is the default).
 
 These suggestions are assuming you're measuring the amount of light some point on the ground is receiving.
 
@@ -39,6 +39,16 @@ Calling `refresh()` is left up to you. The easiest way to do this is to add a ch
 * and lastly and most importantly, triggers the parent node's `refresh()` method in the `timeout` signal.
 
 There's an included example scene that does this that you can also check out.
+
+### Sanity Check
+
+Things not quite working?
+
+Check:
+1. that your light source is on the correct layer(s) and shadows are enabled. Layers are in the VisualInstance3D subsection, and shadows under Light3D > Shadow.
+2. that your shadow-casting meshes (e.g. MeshInstance3D) are on the expected layer, configured under VisualInstance3D again.
+3. that your LightSensor3D is targeting the layer that's casting light/receiving shadows configured above.
+
 
 ### Outputs
 
