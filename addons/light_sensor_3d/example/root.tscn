@@ -14,6 +14,8 @@ sky_material = SubResource("ProceduralSkyMaterial_5l7yt")
 background_mode = 2
 sky = SubResource("Sky_asboq")
 ambient_light_source = 1
+ssao_enabled = true
+ssil_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_u00y1"]
 size = Vector2(10, 5)
