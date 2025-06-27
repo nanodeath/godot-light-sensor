@@ -48,6 +48,7 @@ editor_description = "This light probe can track the color and luminance at its 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 script = ExtResource("3_3whfq")
 layer = 2
+reference_camera = NodePath("../../Camera3D")
 
 [node name="Timer" type="Timer" parent="NoLight/LightProbe3D"]
 autostart = true

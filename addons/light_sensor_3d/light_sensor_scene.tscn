@@ -2,6 +2,7 @@
 
 [sub_resource type="Environment" id="Environment_subviewport"]
 background_mode = 1
+ambient_light_source = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jxs1c"]
 shading_mode = 2
@@ -18,7 +19,7 @@ viewport_path = NodePath("SubViewport")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false
-size = Vector2i(4, 4)
+size = Vector2i(32, 32)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport"]
@@ -43,7 +44,7 @@ remote_path = NodePath("../SubViewport/Camera3D")
 [node name="DebugViewportSprite" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
 cast_shadow = 0
-pixel_size = 0.1
+pixel_size = 0.0125
 axis = 1
 texture_filter = 0
 texture = SubResource("ViewportTexture_tmbga")
