@@ -1,0 +1,3 @@
+[submodule "tests/gut"]
+	path = tests/gut
+	url = https://github.com/bitwes/Gut.git

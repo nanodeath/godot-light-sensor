@@ -5,3 +5,7 @@
 .idea/
 *.tmp
 .claude/
+.envrc
+.direnv/
+test_results/
+addons/gut
