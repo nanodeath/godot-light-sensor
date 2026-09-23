@@ -47,7 +47,13 @@ Frame time added per reading, measured with 32 sensors on Godot 4.6.1:
 
 You can reproduce these with `tests/benchmarks/benchmark_refresh.gd`; keep its window visible while it runs. Most games don't need to refresh often -- every 250ms is plenty for "is the player standing in shadow?" logic.
 
-On the Compatibility renderer, `refresh_async()` falls back to `refresh()`, because Compatibility has no RenderingDevice to read from asynchronously.
+`refresh_async()` falls back to `refresh()` in two cases:
+* on the Compatibility renderer, which has no RenderingDevice to read from asynchronously
+* in low-processor mode, which only draws frames when something changes, so an async reading could wait indefinitely. It logs a warning the first time.
+
+If you call `refresh()` while an async reading is in flight, the async reading is dropped when it lands, since it's older. Callers awaiting it still resume.
+
+While rendering is paused, for example by a minimized window, a pending async reading waits until rendering resumes.
 
 If you free the sensor right after `await sensor.refresh_async()` returns, use `queue_free()` rather than `free()`. The sensor is still emitting the signal that resumed your code, and Godot reports an error if it's freed mid-emission.
 

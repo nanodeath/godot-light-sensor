@@ -54,7 +54,10 @@ fail=0
 
 # Import resources (required for GUT class_names)
 echo "--- Importing resources ---"
-"$GODOT" --path "$PROJECT_DIR" --headless --import --quit 2>&1 | tail -1
+# The engine occasionally crashes here; keep going so the test runs still report
+if ! "$GODOT" --path "$PROJECT_DIR" --headless --import --quit 2>&1 | tail -1; then
+    echo "WARNING: import step failed; continuing"
+fi
 
 for run in "${RUNS[@]}"; do
     read -r renderer extra_flags <<< "$run"
