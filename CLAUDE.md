@@ -26,19 +26,19 @@ This is a Godot addon project with no external build system. Development is done
 The addon uses a SubViewport (4x4 pixels) with an orthogonal camera pointing at a white plane to capture light data:
 
 1. **SubViewport Rendering**: Tiny viewport for efficient light sampling
-2. **GPU-CPU Transfer**: Downloads texture data to calculate color/luminance (~0.2ms operation)
+2. **GPU-CPU Transfer**: Downloads texture data to calculate color/luminance. `refresh_async()` uses `RenderingDevice.texture_get_data_async()` (lands 2 frames later); `refresh()` blocks (~0.1ms per sensor). Compatibility has no RenderingDevice, so async falls back to sync there
 3. **Layer-based Filtering**: Uses Godot's layer system to selectively detect light sources
 4. **Signal System**: Emits `color_updated` and `light_level_updated` signals
 
 ### Performance Considerations
-- **Expensive Operation**: Each `refresh()` call requires GPU-CPU texture transfer
+- **Prefer `refresh_async()`**: 5-20x less frame time per reading than `refresh()` (see `tests/benchmarks/benchmark_refresh.gd`)
 - **Recommended Refresh Rate**: 1-4 Hz (250ms-1000ms intervals) to maintain performance
 - **Multi-sensor Scaling**: Stagger refresh timing for multiple sensors
 
 ## Key Files and Their Roles
 
 ### Core Plugin Files (`addons/light_sensor_3d/`)
-- `plugin.cfg` - Plugin metadata (version 1.0.0)
+- `plugin.cfg` - Plugin metadata (version 2.0.0)
 - `plugin.gd` - Plugin lifecycle management, registers gizmo plugin
 - `light_sensor_3d.gd` - Main sensor class extending Node3D, handles light detection logic
 - `light_sensor_3d_gizmo_plugin.gd` - Editor gizmos for visual representation
@@ -49,7 +49,7 @@ The addon uses a SubViewport (4x4 pixels) with an orthogonal camera pointing at 
 - `sensor_label.gd` - Example script demonstrating real-time light level display
 
 ### Configuration Files
-- `project.godot` - Godot 4.2 project configuration, Mobile features enabled
+- `project.godot` - Godot 4.4 project configuration (minimum supported version), Mobile features enabled
 - `.gitattributes` - LF line endings, export rules for Asset Library distribution
 - `.gitignore` - Excludes `.godot/` build artifacts
 

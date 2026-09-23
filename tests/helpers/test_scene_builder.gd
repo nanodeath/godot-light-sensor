@@ -123,10 +123,7 @@ static func get_sensor(root: Node3D) -> LightSensor3D:
 
 
 static func current_renderer() -> String:
-	# Use call() for compatibility with Godot < 4.5 where this method doesn't exist
-	if RenderingServer.has_method("get_current_rendering_method"):
-		return RenderingServer.call("get_current_rendering_method")
-	return ProjectSettings.get_setting("rendering/renderer/rendering_method", "forward_plus")
+	return RenderingServer.get_current_rendering_method()
 
 
 static func is_compatibility_renderer() -> bool:
