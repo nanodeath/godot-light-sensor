@@ -62,6 +62,15 @@ var _sub_viewport: SubViewport
 var _sensor_camera: Camera3D
 var _fallback_environment: Environment
 
+# Async readings are numbered. A request is in flight while requested > finished.
+# Readings from requests at or below stale_through predate a refresh() and are dropped.
+var _async_requested_seq := 0
+var _async_finished_seq := 0
+var _async_stale_through_seq := 0
+static var _warned_low_processor_mode := false
+
+signal _async_refresh_finished
+
 func _ready():
 	if Engine.is_editor_hint():
 		return
@@ -87,12 +96,98 @@ func _ready():
 		print_debug(get_path(), ": This LightSensor3D is configured to print out timing information.")
 
 ## Recalculates the light/color affecting this probe.
+## Blocks the main thread until the GPU hands back the texture. See refresh_async().
 func refresh() -> void:
-	var t_start = Time.get_ticks_usec()
-	var texture := _sub_viewport.get_texture()
-	var image := texture.get_image() # this one's a doozy
+	_async_stale_through_seq = _async_requested_seq
+	var t_start := Time.get_ticks_usec()
+	var image := _sub_viewport.get_texture().get_image() # this one's a doozy
+	_apply_image(image, t_start)
 
-	var vp_size := _sub_viewport.size
+## Recalculates the light/color affecting this probe without blocking the main thread.
+## The reading lands a frame or two later, emitting the same signals as refresh().
+## Use `await sensor.refresh_async()` to wait for it, or call it and move on.
+## A call made while another is still in flight waits for that one instead.
+## A reading still in flight when refresh() runs is dropped, since it's older.
+## Falls back to refresh() on the Compatibility renderer, which has no RenderingDevice,
+## and in low-processor mode, which skips drawing the frames readings arrive in.
+## Works with rendering on a separate thread.
+func refresh_async() -> void:
+	var target_seq := _async_requested_seq
+	if _async_finished_seq == _async_requested_seq:
+		var rd := RenderingServer.get_rendering_device()
+		if rd == null:
+			refresh()
+			return
+		if OS.low_processor_usage_mode:
+			if not _warned_low_processor_mode:
+				_warned_low_processor_mode = true
+				push_warning("LightSensor3D: low-processor mode only draws frames when something changes, so refresh_async() falls back to refresh().")
+			refresh()
+			return
+
+		# Read these before numbering the request, so a call before _ready fails without
+		# leaving a request that never completes. vp_size is captured now because the
+		# viewport may resize before the data arrives.
+		var viewport_texture := _sub_viewport.get_texture().get_rid()
+		var vp_size := _sub_viewport.size
+
+		# RenderingDevice calls must happen on the render thread, which may be separate.
+		_async_requested_seq += 1
+		target_seq = _async_requested_seq
+		RenderingServer.call_on_render_thread(_request_download.bind(
+			rd, viewport_texture, vp_size, get_instance_id(), target_seq))
+
+	# Each completion emits, so wait until this caller's reading is the one that landed
+	while _async_finished_seq < target_seq:
+		await _async_refresh_finished
+
+# The download steps run on the render thread, which may be separate from the main
+# thread. They're static and carry only the sensor's instance ID, so they never touch
+# the node while the main thread might be freeing it.
+static func _request_download(rd: RenderingDevice, viewport_texture: RID, vp_size: Vector2i, sensor_id: int, seq: int) -> void:
+	var texture_rid := RenderingServer.texture_get_rd_texture(viewport_texture)
+
+	# HDR viewports use other formats, some also 4 bytes per pixel, so check the format itself
+	var format := rd.texture_get_format(texture_rid).format
+	if format != RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM:
+		push_error("LightSensor3D: refresh_async() needs an RGBA8 viewport texture, got RenderingDevice.DataFormat %d" % format)
+		_finish_on_main_thread.call_deferred(PackedByteArray(), vp_size, sensor_id, seq)
+		return
+
+	var err := rd.texture_get_data_async(texture_rid, 0, _on_texture_downloaded.bind(vp_size, sensor_id, seq))
+	if err != OK:
+		push_error("LightSensor3D: texture_get_data_async failed: %s" % error_string(err))
+		_finish_on_main_thread.call_deferred(PackedByteArray(), vp_size, sensor_id, seq)
+
+# RenderingDevice calls this from inside its frame processing, where running user code
+# (signal handlers, resumed awaits) can crash the engine. Hand off to the main thread.
+static func _on_texture_downloaded(data: PackedByteArray, vp_size: Vector2i, sensor_id: int, seq: int) -> void:
+	_finish_on_main_thread.call_deferred(data, vp_size, sensor_id, seq)
+
+static func _finish_on_main_thread(data: PackedByteArray, vp_size: Vector2i, sensor_id: int, seq: int) -> void:
+	# The sensor may have been freed while the download was in flight
+	var sensor := instance_from_id(sensor_id) as LightSensor3D
+	if sensor:
+		sensor._finish_async(data, vp_size, seq)
+
+# Marks the request finished before applying, so a signal handler that calls
+# refresh_async() starts a fresh request instead of joining this one.
+func _finish_async(data: PackedByteArray, vp_size: Vector2i, seq: int) -> void:
+	_async_finished_seq = seq
+
+	# An empty array means the request failed, which was already reported
+	if seq > _async_stale_through_seq and not data.is_empty():
+		var t_start := Time.get_ticks_usec()
+
+		# The GPU texture is RGBA8; the averaging code expects get_image()'s RGB8
+		var image := Image.create_from_data(vp_size.x, vp_size.y, false, Image.FORMAT_RGBA8, data)
+		image.convert(Image.FORMAT_RGB8)
+		_apply_image(image, t_start)
+
+	_async_refresh_finished.emit()
+
+func _apply_image(image: Image, t_start: int) -> void:
+	var vp_size := image.get_size()
 	var sample_color: Color
 
 	if vp_size.x <= 4 and vp_size.y <= 4:

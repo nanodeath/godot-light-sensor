@@ -218,10 +218,10 @@ light_energy = 0.5
 shadow_enabled = true
 spot_angle = 10.0
 
-[connection signal="timeout" from="NoLight/LightProbe3D/Timer" to="NoLight/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="LittleLight/LightProbe3D/Timer" to="LittleLight/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="SomeLight/LightProbe3D/Timer" to="SomeLight/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="BrightLight/LightProbe3D/Timer" to="BrightLight/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="FullLight/LightProbe3D/Timer" to="FullLight/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="TestLight1/LightProbe3D/Timer" to="TestLight1/LightProbe3D" method="refresh"]
-[connection signal="timeout" from="TestLight2/LightProbe3D/Timer" to="TestLight2/LightProbe3D" method="refresh"]
+[connection signal="timeout" from="NoLight/LightProbe3D/Timer" to="NoLight/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="LittleLight/LightProbe3D/Timer" to="LittleLight/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="SomeLight/LightProbe3D/Timer" to="SomeLight/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="BrightLight/LightProbe3D/Timer" to="BrightLight/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="FullLight/LightProbe3D/Timer" to="FullLight/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="TestLight1/LightProbe3D/Timer" to="TestLight1/LightProbe3D" method="refresh_async"]
+[connection signal="timeout" from="TestLight2/LightProbe3D/Timer" to="TestLight2/LightProbe3D" method="refresh_async"]

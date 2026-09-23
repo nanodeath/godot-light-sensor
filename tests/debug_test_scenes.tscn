@@ -1,0 +1,477 @@
+[gd_scene load_steps=10 format=3 uid="uid://dn1asvitbsxk5"]
+
+[ext_resource type="Script" path="res://addons/light_sensor_3d/light_sensor_3d.gd" id="1_sensor"]
+[ext_resource type="Script" path="res://tests/debug_test_scenes.gd" id="2_script"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mat"]
+cull_mode = 2
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_backwall"]
+size = Vector2(2, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sidewall"]
+size = Vector2(1, 2)
+
+[sub_resource type="Environment" id="Environment_ssao"]
+background_mode = 1
+ambient_light_source = 1
+ssao_enabled = true
+
+[sub_resource type="Environment" id="Environment_ssil"]
+background_mode = 1
+ambient_light_source = 1
+ssil_enabled = true
+
+[sub_resource type="Environment" id="Environment_both"]
+background_mode = 1
+ambient_light_source = 1
+ssao_enabled = true
+ssil_enabled = true
+
+[node name="DebugTestScenes" type="Node3D"]
+script = ExtResource("2_script")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 4.5, 8.012, 4.525)
+
+[node name="Dark" type="Node3D" parent="."]
+
+[node name="Sensor" type="Node3D" parent="Dark"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="Dark"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Dark (no light)"
+
+[node name="Reading" type="Label3D" parent="Dark"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="Dark"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="Dark"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="Dark"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="OmniLight015" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="Sensor" type="Node3D" parent="OmniLight015"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="OmniLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "OmniLight 0.15"
+
+[node name="Reading" type="Label3D" parent="OmniLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="OmniLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="OmniLight015"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="OmniLight015"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="OmniLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_energy = 0.15
+omni_range = 2.0
+
+[node name="OmniLight03" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+
+[node name="Sensor" type="Node3D" parent="OmniLight03"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="OmniLight03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "OmniLight 0.3"
+
+[node name="Reading" type="Label3D" parent="OmniLight03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="OmniLight03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="OmniLight03"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="OmniLight03"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="OmniLight03"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_energy = 0.3
+omni_range = 2.0
+
+[node name="SpotLight015" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 0)
+
+[node name="Sensor" type="Node3D" parent="SpotLight015"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="SpotLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "SpotLight 0.15"
+
+[node name="Reading" type="Label3D" parent="SpotLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="SpotLight015"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="SpotLight015"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="SpotLight015"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="SpotLight3D" parent="SpotLight015"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.5, 0)
+layers = 3
+light_energy = 0.15
+shadow_enabled = true
+spot_angle = 25.0
+
+[node name="RedOmni" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Sensor" type="Node3D" parent="RedOmni"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="RedOmni"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Red OmniLight"
+
+[node name="Reading" type="Label3D" parent="RedOmni"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="RedOmni"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="RedOmni"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="RedOmni"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="RedOmni"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_color = Color(1, 0, 0, 1)
+light_energy = 0.3
+omni_range = 2.0
+
+[node name="OmniSSAO" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3, 0)
+
+[node name="Sensor" type="Node3D" parent="OmniSSAO"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+environment_override = SubResource("Environment_ssao")
+
+[node name="Title" type="Label3D" parent="OmniSSAO"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Omni + SSAO"
+
+[node name="Reading" type="Label3D" parent="OmniSSAO"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="OmniSSAO"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="OmniSSAO"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="OmniSSAO"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="OmniSSAO"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_energy = 0.15
+omni_range = 2.0
+
+[node name="OmniSSIL" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3, 0)
+
+[node name="Sensor" type="Node3D" parent="OmniSSIL"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+environment_override = SubResource("Environment_ssil")
+
+[node name="Title" type="Label3D" parent="OmniSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Omni + SSIL"
+
+[node name="Reading" type="Label3D" parent="OmniSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="OmniSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="OmniSSIL"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="OmniSSIL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="OmniSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_energy = 0.15
+omni_range = 2.0
+
+[node name="OmniSSAOSSIL" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 3, 0)
+
+[node name="Sensor" type="Node3D" parent="OmniSSAOSSIL"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+environment_override = SubResource("Environment_both")
+
+[node name="Title" type="Label3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Omni + SSAO+SSIL"
+
+[node name="Reading" type="Label3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="OmniLight3D" parent="OmniSSAOSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+layers = 3
+light_energy = 0.15
+omni_range = 2.0
+
+[node name="SpotBounce" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+
+[node name="Sensor" type="Node3D" parent="SpotBounce"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+
+[node name="Title" type="Label3D" parent="SpotBounce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Spot bounce (no SSIL)"
+
+[node name="Reading" type="Label3D" parent="SpotBounce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="SpotBounce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="SpotBounce"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="SpotBounce"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="SpotLight3D" parent="SpotBounce"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.5)
+layers = 3
+shadow_enabled = true
+spot_angle = 20.0
+
+[node name="SpotBounceSSIL" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6, 0)
+
+[node name="Sensor" type="Node3D" parent="SpotBounceSSIL"]
+script = ExtResource("1_sensor")
+layer = 2
+enable_subviewport_debug = true
+environment_override = SubResource("Environment_ssil")
+
+[node name="Title" type="Label3D" parent="SpotBounceSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Spot bounce + SSIL"
+
+[node name="Reading" type="Label3D" parent="SpotBounceSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+billboard = 1
+modulate = Color(1, 1, 0, 1)
+text = "..."
+font_size = 28
+
+[node name="Floor" type="MeshInstance3D" parent="SpotBounceSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="SpotBounceSSIL"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.3, -1)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_backwall")
+
+[node name="SideWall" type="MeshInstance3D" parent="SpotBounceSSIL"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -1, 0.3, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_mat")
+mesh = SubResource("PlaneMesh_sidewall")
+
+[node name="Light" type="SpotLight3D" parent="SpotBounceSSIL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.5)
+layers = 3
+shadow_enabled = true
+spot_angle = 20.0
